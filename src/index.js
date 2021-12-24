@@ -1,7 +1,8 @@
 const fs = require('fs')  
 const axios = require('axios')
 const path = require('path')  
-const domain = 'https://wptavern.com'
+const domain = 'https://example.com'
+const perPage = 100
 
 async function downloadImage(id) {  
 	const url = `${domain}/wp-json/wp/v2/media/${id}`
@@ -10,7 +11,6 @@ async function downloadImage(id) {
 
 	axios.get(url)
 	.then(res => {
-		// console.log(res)
 		axios({
 			method: "get",
 			url: res.data.guid.rendered,
@@ -24,10 +24,9 @@ async function downloadImage(id) {
 	})
 }
 
-axios.get(`${domain}/wp-json/wp/v2/posts?per_page=100`)
+axios.get(`${domain}/wp-json/wp/v2/posts?per_page=${perPage}`)
 .then(res => {
     res.data.forEach(item => {
-        // console.log(item.featured_media)
         downloadImage(item.featured_media)  
     });
     
